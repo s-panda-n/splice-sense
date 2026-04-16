@@ -205,3 +205,27 @@ cython_debug/
 marimo/_static/
 marimo/_lsp/
 __marimo__/
+
+# Large genomics data files — never commit these
+data/raw/
+models/checkpoints/
+*.fa
+*.fasta
+*.fa.gz
+*.fai
+*.gtf
+*.gtf.gz
+
+# Model weights
+*.bin
+*.safetensors
+*.pt
+*.pth
+
+# SLURM logs
+slurm/logs/*.out
+slurm/logs/*.err
+
+# Misc
+.env
+*.egg-info/
