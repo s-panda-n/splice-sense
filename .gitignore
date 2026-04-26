@@ -229,3 +229,4 @@ slurm/logs/*.err
 # Misc
 .env
 *.egg-info/
+data/clinvar/variant_summary.txt

@@ -17,8 +17,8 @@ wget -q https://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_47/GRC
 
 # Decompress and index
 gunzip GRCh38.primary_assembly.genome.fa.gz
-source /share/apps/pyenv/py3.9/etc/profile.d/conda.sh
-conda activate genomics
+source /home/spp9400/miniforge3/etc/profile.d/conda.sh
+conda activate /home/spp9400/miniforge3/envs/splice
 python -c "from pyfaidx import Fasta; Fasta('GRCh38.primary_assembly.genome.fa'); print('indexed')"
 
 echo "Done"
