@@ -230,3 +230,6 @@ slurm/logs/*.err
 .env
 *.egg-info/
 data/clinvar/variant_summary.txt
+data/processed/splice_sites_all.csv
+data/processed/splice_sites.csv
+data/processed/splice_sites_10k.csv
