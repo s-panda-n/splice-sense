@@ -1,22 +1,18 @@
 import torch
 import pandas as pd
 import numpy as np
-from transformers import (AutoTokenizer, AutoModelForSequenceClassification,
+from transformers import (AutoTokenizer, BertForSequenceClassification,
                            TrainingArguments, Trainer)
 from torch.utils.data import Dataset
 from sklearn.metrics import accuracy_score, f1_score
 from sklearn.model_selection import train_test_split
 
-# ── Build dataset from our own splice_sites_all.csv ───────────
 print("Loading splice site data...")
 df = pd.read_csv("data/processed/splice_sites_all.csv")
 print(f"Total canonical splice sites: {len(df):,}")
 
-# Create labels: 0=neither doesn't exist in our data
-# donor=1, acceptor=2
 df["label"] = df["site_type"].map({"donor": 1, "acceptor": 2})
 
-# Add negative examples — shuffled sequences as "neither" class
 print("Generating negative examples...")
 negatives = df.sample(len(df) // 2, random_state=42).copy()
 negatives["sequence"] = negatives["sequence"].apply(
@@ -24,16 +20,13 @@ negatives["sequence"] = negatives["sequence"].apply(
 )
 negatives["label"] = 0
 
-# Combine and split
 all_data = pd.concat([df[["sequence","label"]], negatives[["sequence","label"]]])
 all_data = all_data.sample(frac=1, random_state=42).reset_index(drop=True)
 
 train_df, test_df = train_test_split(all_data, test_size=0.1, random_state=42,
                                       stratify=all_data["label"])
 print(f"Train: {len(train_df):,} | Test: {len(test_df):,}")
-print(train_df["label"].value_counts())
 
-# ── PyTorch Dataset ───────────────────────────────────────────
 class SpliceDataset(Dataset):
     def __init__(self, sequences, labels, tokenizer, max_length=512):
         self.encodings = tokenizer(
@@ -52,18 +45,19 @@ class SpliceDataset(Dataset):
         item["labels"] = torch.tensor(self.labels[idx])
         return item
 
-# ── Load model ────────────────────────────────────────────────
 print("Loading tokenizer and model...")
 tokenizer = AutoTokenizer.from_pretrained(
     "zhihan1996/DNABERT-2-117M", trust_remote_code=True
 )
-model = AutoModelForSequenceClassification.from_pretrained(
-    "zhihan1996/DNABERT-2-117M", num_labels=3, trust_remote_code=True
+model = BertForSequenceClassification.from_pretrained(
+    "zhihan1996/DNABERT-2-117M",
+    num_labels=3,
+    trust_remote_code=True,
+    ignore_mismatched_sizes=True
 )
 
-# Use a sample for speed — 30k train, 5k test
 train_sample = train_df.sample(min(30000, len(train_df)), random_state=42)
-test_sample  = test_df.sample(min(5000, len(test_df)), random_state=42)
+test_sample  = test_df.sample(min(5000,  len(test_df)),  random_state=42)
 
 print("Tokenizing...")
 train_dataset = SpliceDataset(train_sample["sequence"], train_sample["label"], tokenizer)
@@ -103,4 +97,4 @@ print("Starting fine-tuning...")
 trainer.train()
 trainer.save_model("models/checkpoints/dnabert2-splice")
 tokenizer.save_pretrained("models/checkpoints/dnabert2-splice")
-print("Done — model saved")
+print("Done — model saved to models/checkpoints/dnabert2-splice")
