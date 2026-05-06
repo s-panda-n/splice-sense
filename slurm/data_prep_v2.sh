@@ -9,6 +9,6 @@
 #SBATCH --output=slurm/logs/data_prep_v2.out
 
 source /home/spp9400/miniforge3/etc/profile.d/conda.sh
-conda activate splice
+conda activate /home/spp9400/.conda/envs/genomics
 cd /scratch/spp9400/splice-sense
 python data_prep_v2.py
