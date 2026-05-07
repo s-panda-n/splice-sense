@@ -17,6 +17,10 @@ MODEL_PATHS = {
 MODEL_PATH = MODEL_PATHS[args.model]
 BATCH_SIZE = 64
 
+# Label mapping used during training
+# donor=1, acceptor=2, neither=0
+LABEL_MAP = {"donor": 1, "acceptor": 2}
+
 print(f"Loading {args.model}...")
 tokenizer = AutoTokenizer.from_pretrained(MODEL_PATH, trust_remote_code=True)
 model     = AutoModelForSequenceClassification.from_pretrained(
@@ -39,10 +43,11 @@ for i in tqdm(range(0, len(sample), BATCH_SIZE)):
     with torch.no_grad():
         logits = model(**inputs).logits
     pred = torch.argmax(logits, dim=-1).cpu().numpy()
-    true = batch["site_type"].map({"donor": 2, "acceptor": 1}).values
-    preds.extend(pred)
-    trues.extend(true)
+    true = batch["site_type"].map(LABEL_MAP).values
+    preds.extend(pred.tolist())
+    trues.extend(true.tolist())
 
 print(f"\nAccuracy: {accuracy_score(trues, preds):.4f}")
 print(classification_report(trues, preds,
-      target_names=["neither", "acceptor", "donor"]))
+      target_names=["neither", "donor", "acceptor"],
+      labels=[0, 1, 2]))
