@@ -1,0 +1,73 @@
+Traceback (most recent call last):
+  File "<string>", line 49, in <module>
+  File "/home/spp9400/.conda/envs/genomics/lib/python3.10/json/__init__.py", line 179, in dump
+    for chunk in iterable:
+  File "/home/spp9400/.conda/envs/genomics/lib/python3.10/json/encoder.py", line 431, in _iterencode
+    yield from _iterencode_dict(o, _current_indent_level)
+  File "/home/spp9400/.conda/envs/genomics/lib/python3.10/json/encoder.py", line 405, in _iterencode_dict
+    yield from chunks
+  File "/home/spp9400/.conda/envs/genomics/lib/python3.10/json/encoder.py", line 405, in _iterencode_dict
+    yield from chunks
+  File "/home/spp9400/.conda/envs/genomics/lib/python3.10/json/encoder.py", line 376, in _iterencode_dict
+    raise TypeError(f'keys must be str, int, float, bool or None, '
+TypeError: keys must be str, int, float, bool or None, not tuple
+
+=== NT100M — Type1 flip rate by site type ===
+donor: 0.315 (n=30444)
+acceptor: 0.077 (n=29556)
+
+=== NT100M — Type1 flip rate by mutation ===
+ref  alt
+A    C      0.0958
+     G      0.0820
+     T      0.0818
+G    A      0.1506
+     C      0.1981
+     T      0.1372
+T    A      0.4517
+     C      0.2300
+     G      0.4486
+
+=== NT100M — Mean confidence change ===
+Type1: 0.0318
+Type2: -0.0001
+Type3: -0.0001
+
+=== NT500M — Type1 flip rate by site type ===
+donor: 0.306 (n=30444)
+acceptor: 0.063 (n=29556)
+
+=== NT500M — Type1 flip rate by mutation ===
+ref  alt
+A    C      0.0650
+     G      0.0481
+     T      0.1015
+G    A      0.0909
+     C      0.1600
+     T      0.0864
+T    A      0.4858
+     C      0.2343
+     G      0.6086
+
+=== NT500M — Mean confidence change ===
+Type1: 0.0618
+Type2: 0.0002
+Type3: 0.0000
+
+=== CLINVAR — Top genes in merged dataset ===
+GeneSymbol
+TTN       15
+NF1       13
+DMD       13
+USH2A     10
+TSC2      10
+NEB        9
+VPS13B     9
+DYSF       8
+LAMA2      7
+FANCA      6
+COL4A5     6
+COL7A1     6
+COL4A4     6
+MLH1       6
+ABCA4      6
