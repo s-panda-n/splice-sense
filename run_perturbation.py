@@ -2,7 +2,7 @@ import torch
 import pandas as pd
 import numpy as np
 import argparse
-from transformers import AutoTokenizer, AutoModelForSequenceClassification
+from load_model import load_model
 from perturbation.mutagenesis import get_all_mutations
 from tqdm import tqdm
 
@@ -10,24 +10,12 @@ parser = argparse.ArgumentParser()
 parser.add_argument("--model", choices=["nt100m", "nt500m"], required=True)
 args = parser.parse_args()
 
-MODEL_PATHS = {
-    "nt100m": "models/checkpoints/nt-100m-splice",
-    "nt500m": "models/checkpoints/nt-500m-splice"
-}
-
-MODEL_PATH    = MODEL_PATHS[args.model]
 BASELINE_PATH = f"results/baseline_{args.model}.csv"
 OUT_PATH      = f"results/perturbation_{args.model}.csv"
+BATCH_SIZE    = 1
 
-print(f"Loading {args.model} from {MODEL_PATH}...")
-tokenizer = AutoTokenizer.from_pretrained(MODEL_PATH, trust_remote_code=True)
-model     = AutoModelForSequenceClassification.from_pretrained(
-    MODEL_PATH, trust_remote_code=True
-)
-model.eval()
-device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-model.to(device)
-print(f"Running on: {device}")
+print(f"Loading {args.model}...")
+model, tokenizer, device = load_model(args.model)
 
 df = pd.read_csv(BASELINE_PATH)
 print(f"Running perturbations on {len(df):,} sequences...")
