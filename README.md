@@ -1,7 +1,7 @@
 # splice-sense
 
 **How Brittle Are Genomic Language Models?**  
-A biologically-grounded perturbation sensitivity study on splice site prediction.
+Perturbation-Based Evaluation of Nucleotide Transformers for Splice-Site Variant Sensitivity
 
 **Authors:** Amy Kim · Spandan Patil  
 **Course:** AI in Genomics · NYU Courant Institute · Spring 2026
