@@ -1,4 +1,3 @@
-```markdown
 # splice-sense
 
 **How Brittle Are Genomic Language Models?**  
@@ -11,7 +10,7 @@ A biologically-grounded perturbation sensitivity study on splice site prediction
 
 ## Research Question
 
-Do genomic language models change their splice site predictions for the **right biological reasons** — flipping on mutations that destroy the GT/AG consensus signal, while remaining stable on biologically harmless changes?
+Do genomic language models change their splice site predictions for the **right biological reasons**, flipping on mutations that destroy the GT/AG consensus signal, while remaining stable on biologically harmless changes?
 
 We evaluate two Nucleotide Transformer models (100M and 500M parameters) and validate findings against real human variants from ClinVar with known pathogenicity labels.
 
@@ -109,7 +108,7 @@ python -c "import torch, transformers; print(torch.__version__, transformers.__v
 
 ---
 
-## Step 1 — Download Raw Data
+## Step 1 - Download Raw Data
 
 All data is publicly available with no login required.
 
@@ -139,7 +138,7 @@ cd ../..
 
 ---
 
-## Step 2 — Generate Processed Data
+## Step 2 - Generate Processed Data
 
 ```bash
 # Extract canonical GT-AG splice sites from GENCODE
@@ -163,11 +162,11 @@ python clinvar_merge.py
 
 ---
 
-## Step 3 — Fine-Tune Models
+## Step 3 - Fine-Tune Models
 
 Both models are fine-tuned on splice site classification: donor (label=1), acceptor (label=2), neither (label=0). Training data is 30,000 sequences sampled from `splice_sites_all.csv`. The 10,000 experiment sequences in `splice_sites_10k.csv` are held out and never seen during training.
 
-**NT-100M — full fine-tuning:**
+**NT-100M - full fine-tuning:**
 ```bash
 # Runtime: ~45 mins on A100
 python finetune_nt100m.py
@@ -175,7 +174,7 @@ python finetune_nt100m.py
 # Expected test accuracy: ~99%
 ```
 
-**NT-500M — LoRA fine-tuning (r=8):**
+**NT-500M - LoRA fine-tuning (r=8):**
 ```bash
 # Runtime: ~2 hours on A100
 python finetune_nt500m.py
@@ -192,7 +191,7 @@ python validate_nt500m.py                   # NT-500M (LoRA requires different l
 
 ---
 
-## Step 4 — Baseline Inference
+## Step 4 - Baseline Inference
 
 Run each fine-tuned model on the 10,000 unperturbed sequences to record baseline predictions and confidence scores.
 
@@ -206,7 +205,7 @@ python baseline_inference.py --model nt500m
 
 ---
 
-## Step 5 — Perturbation Experiment
+## Step 5 - Perturbation Experiment
 
 For each of the 10,000 sequences, 36 mutations are applied and the model is run on each mutant. This produces 360,000 inference calls per model.
 
@@ -228,7 +227,7 @@ python run_perturbation.py --model nt500m
 
 ---
 
-## Step 6 — Metrics and Figures
+## Step 6 - Metrics and Figures
 
 ```bash
 # Compute FFR, SFR, BSR, AUROC, AUPRC
@@ -274,4 +273,3 @@ python figures/plot_all.py
 - Frankish et al. (2023). GENCODE. *Nucleic Acids Research*
 - Ribeiro et al. (2020). CheckList: Beyond Accuracy. *ACL 2020*
 - Grešová et al. (2023). Genomic Benchmarks. *BMC Genomic Data*
-```
